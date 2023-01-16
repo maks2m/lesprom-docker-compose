@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+
+    db:
+        build:
+            context: ./db
+        image: postgres
+        container_name: postgres
+        restart: always
+        ports:
+            - 5432:5432
+        environment:
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_USER: postgres
+            POSTGRES_DB: lesprom
+
+    backend:
+        build:
+            context: ../lesprom-back
+        image: lesprom-back
+        container_name: lesprom-back
+        ports:
+            - 8080:8080
+
+    frontend:
+        build:
+            context: ../lesprom-front
+        image: lesprom-front
+        container_name: lesprom-front
+        ports:
+            - 8081:80
