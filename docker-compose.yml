@@ -1,12 +1,37 @@
-version: '3'
+version: '3.8'
 
 services:
+
+    postgres:
+        build:
+            context: ./keycloak/db
+        image: postgres:keycloak
+        container_name: postgres-keycloak
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+
+    keycloak:
+        image: jboss/keycloak:latest #11.0.2
+        container_name: keycloak
+        ports:
+            - 3533:8080
+        environment:
+            - KEYCLOAK_USER=admin
+            - KEYCLOAK_PASSWORD=admin
+            - DB_VENDOR=postgres
+            - DB_ADDR=postgres-keycloak
+            - DB_DATABASE=keycloak
+            - DB_USER=keycloak
+            - DB_PASSWORD=keycloak
+        depends_on:
+            - postgres
 
     db:
         build:
             context: ./db
-        image: postgres
-        container_name: postgres
+        image: postgres:lespromapp
+        container_name: postgres-app
         restart: always
         ports:
             - 5432:5432
@@ -22,6 +47,8 @@ services:
         container_name: lesprom-back
         ports:
             - 8080:8080
+        environment:
+            APP_PROFILE: test
 
     frontend:
         build:

@@ -1,5 +1,5 @@
-# Извлечение образа postgres 
-FROM postgres:13-alpine
+# Извлечение образа postgres
+FROM postgres:13.0-alpine
 # Установка переменной часового пояса
 #ENV TZ=Asia/Shanghai
 # Установка часового пояса
